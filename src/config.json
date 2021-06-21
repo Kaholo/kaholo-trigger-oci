@@ -1,11 +1,11 @@
 {
-  "name": "OCI-Trigger",
+  "name": "OCI-MonitoringTrigger",
   "type": "trigger",
   "execProgram": "node",
   "main": "app.js",
   "imgUrl": "logo.png",
   "version": "1.0.0",
-  "description": "Handles Oracle Cloud Infrastracture(OCI) Webhooks",
+  "description": "Handles Oracle Cloud Infrastracture(OCI) Monitoring Webhooks",
   "methods": [
     {
       "name": "alertWebhook",

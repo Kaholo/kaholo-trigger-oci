@@ -1,5 +1,5 @@
 {
-  "name": "kaholo-trigger-oci",
+  "name": "kaholo-trigger-oci-monitoring",
   "version": "1.0.0",
   "description": "Handles OCI Monitoring Webhooks",
   "main": "app.js",
