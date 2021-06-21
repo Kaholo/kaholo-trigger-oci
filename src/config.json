@@ -1,0 +1,69 @@
+{
+  "name": "OCI-MonitoringTrigger",
+  "type": "trigger",
+  "execProgram": "node",
+  "main": "app.js",
+  "imgUrl": "logo.png",
+  "version": "1.0.0",
+  "description": "Handles Oracle Cloud Infrastracture(OCI) Monitoring Webhooks",
+  "methods": [
+    {
+      "name": "alertWebhook",
+      "route": "post /webhook/oci/alert",
+      "viewName": "Alert",
+      "params": [
+        {
+          "name": "alertNamePat",
+          "viewName": "Alert Name",
+          "type": "string"
+        },
+        {
+          "name": "minAlertSeverity",
+          "viewName": "Min Alert Severity",
+          "type": "options",
+          "options": [
+            {
+              "id": "Info",
+              "name": "Info"
+            },
+            {
+              "id": "Warning",
+              "name": "Warning"
+            },
+            {
+              "id": "Error",
+              "name": "Error"
+            },
+            {
+              "id": "Critical",
+              "name": "Critical"
+            }
+          ]
+        },
+        {
+          "name": "maxAlertSeverity",
+          "viewName": "Max Alert Severity",
+          "type": "options",
+          "options": [
+            {
+              "id": "Info",
+              "name": "Info"
+            },
+            {
+              "id": "Warning",
+              "name": "Warning"
+            },
+            {
+              "id": "Error",
+              "name": "Error"
+            },
+            {
+              "id": "Critical",
+              "name": "Critical"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
