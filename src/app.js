@@ -6,7 +6,9 @@ const fetch = require("node-fetch");
 async function alertWebhook(req, res) {
   const body = req.body;
   if (body.ConfirmationURL){
-    return fetch(body.ConfirmationURL);
+    const result = await fetch(body.ConfirmationURL);
+    res.send("OK");
+    return result;
   }
   const sevirity = parsers.severity(body.severity);
   findTriggers(
