@@ -1,33 +1,33 @@
-const { findTriggers } = require(`./helpers`);
 const minimatch = require("minimatch");
 const parsers = require("./parsers");
 const fetch = require("node-fetch");
 
-async function alertWebhook(req, res) {
-  const body = req.body;
-  if (body.ConfirmationURL){
-    return fetch(body.ConfirmationURL);
+async function alertWebhook(req, res, settings, triggerControllers) {
+  if (!triggerControllers) {
+    return res.status(400).send("triggers cannot be nil");
   }
-  const sevirity = parsers.severity(body.severity);
-  findTriggers(
-    validateTrigger,
-    [body.title, sevirity],
-    req, res,
-    "alertWebhook",
-    body.title
-  );
-}
+  try {
+    const body = req.body;
+    if (body.ConfirmationURL){
+      const result = await fetch(body.ConfirmationURL);
+      res.send("OK");
+      return result;
+    }
+    const sevirity = parsers.severity(body.severity);
+    const name = body.title;
+    triggerControllers.forEach((trigger) => {
+      let {alertNamePat, minAlertSeverity, maxAlertSeverity} = trigger.params;
+      minAlertSeverity = parsers.severity(minAlertSeverity || "info");
+      maxAlertSeverity = parsers.severity(maxAlertSeverity || "critical");
 
-function validateTrigger(trigger, [alertName, severity]) {
-  const alertNamePat = parsers.string(trigger.params.find((o) => o.name === `alertNamePat`).value);
-  const minAlertSeverity = parsers.severity(trigger.params.find((o) => o.name === `minAlertSeverity`).value || "info");
-  const maxAlertSeverity = parsers.severity(trigger.params.find((o) => o.name === `maxAlertSeverity`).value || "critical");
-
-  if (alertNamePat && !minimatch(alertName, alertNamePat)) {
-    throw `Not matching alert name`;
+      if (alertNamePat && !minimatch(name, alertNamePat)) return;
+      if (sevirity < minAlertSeverity || sevirity > maxAlertSeverity) return;
+      trigger.execute(name, body);
+    });
+    res.status(200).send("OK");
   }
-  if (severity < minAlertSeverity || severity > maxAlertSeverity) {
-    throw `Not matching severity`;
+  catch (err){
+    res.status(422).send(err.message);
   }
 }
 
