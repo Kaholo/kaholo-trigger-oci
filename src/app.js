@@ -3,9 +3,6 @@ const parsers = require("./parsers");
 const fetch = require("node-fetch");
 
 async function alertWebhook(req, res, settings, triggerControllers) {
-  if (!triggerControllers) {
-    return res.status(400).send("triggers cannot be nil");
-  }
   try {
     const body = req.body;
     if (body.ConfirmationURL){
